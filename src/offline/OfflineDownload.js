@@ -464,11 +464,14 @@ function OfflineDownload(config) {
         try {
             let rep = getSelectedRepresentations(mediaInfos);
 
+console.log("saveSelectedRepresentations");
             offlineStoreController.saveSelectedRepresentations(manifestId, rep)
             .then(() => {
+console.log("createFragmentStore");
                 return createFragmentStore(manifestId);
             })
             .then(() => {
+console.log("generateOfflineManifest");
                 return generateOfflineManifest(rep);
             })
             .then(function () {
@@ -612,6 +615,7 @@ function OfflineDownload(config) {
     }
 
     function onError(e) {
+console.log(e);
         if ( e.error.code === OfflineErrors.INDEXEDDB_QUOTA_EXCEED_ERROR ||
              e.error.code === OfflineErrors.INDEXEDDB_INVALID_STATE_ERROR ) {
             stopDownload();

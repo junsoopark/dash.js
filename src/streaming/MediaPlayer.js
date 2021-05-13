@@ -72,7 +72,7 @@ import {
 } from './vo/metrics/HTTPRequest';
 import BASE64 from '../../externals/base64';
 import ISOBoxer from 'codem-isoboxer';
-import DashJSError from './vo/DashJSError';
+//import DashJSError from './vo/DashJSError';
 import {checkParameterType} from './utils/SupervisorTools';
 import ManifestUpdater from './ManifestUpdater';
 import URLUtils from '../streaming/utils/URLUtils';
@@ -256,11 +256,12 @@ function MediaPlayer() {
 
         errHandler = ErrorHandler(context).getInstance();
 
+/*
         if (!capabilities.supportsMediaSource()) {
             errHandler.error(new DashJSError(Errors.CAPABILITY_MEDIASOURCE_ERROR_CODE, Errors.CAPABILITY_MEDIASOURCE_ERROR_MESSAGE));
             return;
         }
-
+*/
         if (mediaPlayerInitialized) return;
         mediaPlayerInitialized = true;
 

@@ -11,6 +11,7 @@ const config = merge(common, {
         'dash.offline': './src/offline/index.js'
     },
     output: {
+        globalObject: 'this',
         filename: '[name].debug.js',
     },
     devServer: {

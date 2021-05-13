@@ -39,7 +39,11 @@ function IndexDBStore() {
 
     let instance,
         manifestStore,
-        fragmentStores;
+        fragmentStores = {};
+
+    let manifests = {
+"manifests": []
+}
 
     function setup() {
         fragmentStores = {};
@@ -73,15 +77,22 @@ function IndexDBStore() {
      * @instance
      */
     function createFragmentStore(storeName) {
-
         if (!fragmentStores[storeName]) {
             console.log('setStore  ' + storeName);
+          /*
             let fragmentStore = localforage.createInstance({
                 driver: localforage.INDEXEDDB,
                 name: 'dash_offline_db',
                 version: 1.0,
                 storeName: storeName
             });
+            */
+            let fragmentStore = {
+              setItem: function(fragmentId, fragmentData) {
+                console.log("fragmentStore.setItem() ", fragmentId);
+                return Promise.resolve();
+              }
+            };
             fragmentStores[storeName] = fragmentStore;
         }
     }
@@ -213,6 +224,8 @@ function IndexDBStore() {
      * @instance
      */
     function getAllManifests() {
+return Promise.resolve(manifests);
+/*
         return manifestStore.getItem('manifest').then(function (array) {
             return Promise.resolve(array ? array : {
                 'manifests': []
@@ -220,8 +233,8 @@ function IndexDBStore() {
         }).catch(function (err) {
             return Promise.reject(err);
         });
+*/
     }
-
     /**
      * Return higher manifest id
      * @returns {Promise} number
@@ -259,7 +272,9 @@ function IndexDBStore() {
                         array.manifests[i] = manifest;
                     }
                 }
-                return manifestStore.setItem('manifest', array);
+                //return manifestStore.setItem('manifest', array);
+                manifests = array;
+                return Promise.resolve(manifests);
             } catch (err) {
                 throw new Error('Any results found !');
             }
@@ -280,6 +295,7 @@ function IndexDBStore() {
             }
 
             item.selected = selected;
+console.log("getManifestById then ", item);
             return updateManifest(item).catch(function () {
                 return Promise.reject('Cannot save selected representations');
             });
@@ -294,13 +310,15 @@ function IndexDBStore() {
      * @instance
      */
     function storeManifest(manifest) {
+return Promise.resolve(manifests.manifests.push(manifest));
+/*
         return manifestStore.getItem('manifest').then(function (results) {
             let array = results ? results : {
                 'manifests': []
             };
             array.manifests.push(manifest);
             return manifestStore.setItem('manifest', array);
-        });
+        });*/
     }
 
     /**
@@ -313,12 +331,13 @@ function IndexDBStore() {
      */
     function storeFragment(manifestId, fragmentId, fragmentData) {
         let fragmentStore = fragmentStores[manifestId];
+        console.log("storeFragment ",manifestId,fragmentId); 
 
         if (!fragmentStore) {
             return Promise.reject(new Error (`No fragment store found for manifest ${manifestId}`));
         }
 
-        return fragmentStore.setItem(fragmentId, fragmentData, function () {
+        return fragmentStore.setItem(fragmentId, fragmentData).then(function () {
             return Promise.resolve();
         }).catch(function (err) {
             return Promise.reject(err);
@@ -417,7 +436,7 @@ function IndexDBStore() {
     }
 
 
-    setup();
+    //setup();
 
     instance = {
         dropAll: dropAll,

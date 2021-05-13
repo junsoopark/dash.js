@@ -217,7 +217,7 @@ function HTTPLoader(cfg) {
                 handleLoaded(true);
 
                 if (config.success) {
-                    config.success(httpRequest.response.response, httpRequest.response.statusText, httpRequest.response.responseURL);
+                    config.success(httpRequest.response.responseText, httpRequest.response.statusText, httpRequest.response.responseURL);
                 }
 
                 if (config.complete) {
